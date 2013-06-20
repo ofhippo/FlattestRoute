@@ -11,6 +11,10 @@
 	height: 250px;
 }
 
+.table {
+	margin-left: -120px;
+}
+
 .color-index {
 	width: 40px;
 	height: 20px;
@@ -122,8 +126,32 @@ form input {
 
 	#slope_chart,
 	#elevation_chart {
+		width: 750px;
+		height: 175px;
+	}
+
+}
+
+@media (min-width: 981px) and (max-width: 1200px) {
+#map-canvas {
+		width: 500px;
+		height: 350px;
+	} 
+
+	#from,
+	#to {
 		width: 300px;
-		height: 250px;
+	}
+
+	.table {
+		width: 300px;
+		margin-left: 0px;
+	}
+
+	#slope_chart,
+	#elevation_chart {
+		width: 470px;
+		height: 175px;
 	}
 
 }

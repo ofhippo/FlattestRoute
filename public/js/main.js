@@ -10,7 +10,6 @@ var markersArray = [];
 var elevations = [];
 var mapPaths = [];
 
-
 // Load the visualization API with the columnchart package.
 google.load("visualization", "1", {packages: ["columnchart"]});
 
@@ -117,6 +116,8 @@ function calcRoute() {
 	});
 	sharableLink(start, end, travelMode);
 }
+
+
 function sharableLink(start, end, travelMode) {
 	// Update url to include sharable link
 	history.replaceState('null', 'Flat Route Finder', '?from=' + encodeURLParameter(start) + '&to=' + encodeURLParameter(end) +
@@ -131,7 +132,6 @@ function updateRoutes() {
 	console.log("Updating routes");
 	// Check if the path has been populated, if it has been already
 	// populated, clear it.
-
 	var routes = this.directions.routes;
 	var path = routes[this.routeIndex].overview_path;
 	distance = routes[this.routeIndex].legs[0].distance;
@@ -140,7 +140,38 @@ function updateRoutes() {
 	$("#travel-time").html(duration.text);
 	$(".travel-info").show();
 	newPath(path, distance.value);
+	
+
+	if ($("#travel-mode").val() === "Bicycling") {
+		var endLat = routes[this.routeIndex].legs[0].end_location.lat();
+		var endLong = routes[this.routeIndex].legs[0].end_location.lng();
+		plotBikeParking(endLat, endLong);
+	}
+
+	//Plot bike racks function:
+	//check if travel mode is biking using jquery like in line 101
+	//if it is, get latLng coordinates: routes[this.routeIndex].legs[0].lat()
+	// routes[this.routeIndex].legs[0].lng()
+	//make API call to Parse
 }
+function plotBikeParking(endLat, endLong) {
+	//initialize Parse
+	Parse.initialize("xSId1N6iguBFx6Neo3arIQ0M206c491XdMS8T2V5", "si4VpTxbyac43WSJCVtEvSiftj082SUw8ORLSx8x");
+
+	var point = new Parse.GeoPoint({latitude: endLat, longitude: endLong});
+	placeObject.set("location", point);
+	var query = new Parse.Query(PlaceObject);
+	query.near("location", placeObject);
+	query.limit(5);
+	query.find({
+  		success: function(placesObjects) {  //this needs to be changed
+	  	}
+	});
+
+
+
+
+} 
 
 function newPath(path) {
 		var pathRequest = {

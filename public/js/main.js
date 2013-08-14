@@ -159,15 +159,13 @@ function plotBikeParking(endLat, endLong) {
 	Parse.initialize("xSId1N6iguBFx6Neo3arIQ0M206c491XdMS8T2V5", "si4VpTxbyac43WSJCVtEvSiftj082SUw8ORLSx8x");
 
 	var point = new Parse.GeoPoint({latitude: endLat, longitude: endLong});
+	var PlaceObject = Parse.Object.extend("PlaceObject");
+	var placeObject = new PlaceObject();
 	placeObject.set("location", point);
 	var query = new Parse.Query(PlaceObject);
-	query.near("location", placeObject);
-	query.limit(5);
-	query.find({
-  		success: function(placesObjects) {  //this needs to be changed
-	  	}
-	});
+	query.near(placeObject);
 
+	//need to query points in file near var point
 
 
 

@@ -12,6 +12,10 @@ var mapPaths = [];
 
 // Load the visualization API with the columnchart package.
 google.load("visualization", "1", {packages: ["columnchart"]});
+//For retrieving bike parking information.
+Parse.initialize("xSId1N6iguBFx6Neo3arIQ0M206c491XdMS8T2V5", 
+	"si4VpTxbyac43WSJCVtEvSiftj082SUw8ORLSx8x");
+
 
 // Runs after page is loaded.
 $(function () {
@@ -155,20 +159,29 @@ function updateRoutes() {
 	//make API call to Parse
 }
 function plotBikeParking(endLat, endLong) {
-	//initialize Parse
-	Parse.initialize("xSId1N6iguBFx6Neo3arIQ0M206c491XdMS8T2V5", "si4VpTxbyac43WSJCVtEvSiftj082SUw8ORLSx8x");
-
-	var point = new Parse.GeoPoint({latitude: endLat, longitude: endLong});
-	var PlaceObject = Parse.Object.extend("PlaceObject");
-	var placeObject = new PlaceObject();
-	placeObject.set("location", point);
+	var point = new Parse.GeoPoint({
+		latitude: endLat, 
+		longitude: endLong
+	});
+	var PlaceObject = Parse.Object.extend("placeObject");
 	var query = new Parse.Query(PlaceObject);
-	query.near(placeObject);
-
-	//need to query points in file near var point
-
-
-
+	query.near("location", point); //(key, value)
+	query.limit(5);
+	query.find({
+		success: function(bikeLocations) {
+			for (var i = 0; i <= 4; i ++) {
+				var location = new google.maps.LatLng(
+					bikeLocations[i].get("location").latitude,
+					bikeLocations[i].get("location").longitude
+					);
+				map.locationMarker = new google.maps.Marker({
+					position: location,
+					map: map,
+					labelContent: "location:" + location
+				})
+			}
+		}
+	})
 } 
 
 function newPath(path) {

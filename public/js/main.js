@@ -9,6 +9,7 @@ var duration = null;
 var markersArray = [];
 var elevations = [];
 var mapPaths = [];
+var bikeLocation = [];
 
 // Load the visualization API with the columnchart package.
 google.load("visualization", "1", {packages: ["columnchart"]});
@@ -169,20 +170,23 @@ function plotBikeParking(endLat, endLong) {
 	query.limit(5);
 	query.find({
 		success: function(bikeLocations) {
+			debugger
 			for (var i = 0; i <= 4; i ++) {
 				var location = new google.maps.LatLng(
 					bikeLocations[i].get("location").latitude,
 					bikeLocations[i].get("location").longitude
-					);
+				);
 				map.locationMarker = new google.maps.Marker({
 					position: location,
 					map: map,
 					labelContent: "location:" + location
 				})
+				bikeLocation.push(map.locationMarker)
 			}
 		}
-	})
+	});
 } 
+
 
 function newPath(path) {
 		var pathRequest = {
